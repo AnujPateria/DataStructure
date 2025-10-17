@@ -16,12 +16,6 @@ public:
             if(st.empty() || n2[st.top()] > n2[i]){
                 st.push(i);
             }
-            // for(int j = ch ; j < st.top(); j++){
-            //     mpp[n2[j]] = n2[st.top()];
-            // }
-        }
-        for(auto i : mpp){
-            cout<<i.first <<" "<<i.second<<endl;
         }
         for(int i = 0 ; i < n ; i++){
             if(mpp.find(n1[i]) != mpp.end()){
