@@ -9,16 +9,15 @@ public:
         while(count<2 && i < n){
             while(!st.empty() && nums[st.top()] < nums[i]){
                 if(ans[st.top()] == -1){
-                    // cout<<nums[i]<<" ";
                     ans[st.top()] = nums[i];
                 }
                 st.pop();
             }
             if(st.empty() || nums[st.top()] >= nums[i]){
-                // if(count == 1){
-                //     count++;
-                //     break;
-                // }
+                if(count == 1 && st.empty()){
+                    return ans;
+                    break;
+                }
                 st.push(i);
             }
             i++;
