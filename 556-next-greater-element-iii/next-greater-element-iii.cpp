@@ -22,22 +22,18 @@ public:
     }
 
     long nextGreaterElement(int n) {
-        stack<int> st;
+        if(n<10){
+            return -1;
+        }
         string stt = to_string(n);
-        string temp = stt;
-        reverse(temp.begin(), temp.end());
         int sz = stt.size();
-        bool check = false;
-        int i= sz-1;
+        int i= sz-2;
         while(i>=0){
-            if(!st.empty() && (stt[st.top()] - 'a') > (stt[i] - 'a')){
+            if((stt[i+1] - 'a') > (stt[i] - 'a')){
                 find_ele(i, stt, sz);
                 long ans = stol(stt);
                 cout<<ans<<endl;
                 return ans > INT_MAX ? -1 : ans;
-            }
-            if(st.empty() || (stt[st.top()] - 'a') <= (stt[i] - 'a')){
-                st.push(i);
             }
             i--;
         }
