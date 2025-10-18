@@ -18,7 +18,7 @@ public:
         cout<<"abc"<<endl;
         swap(s[i], s[idx]);
         sort(s.begin() + i + 1 , s.end());
-        return;
+        // return;
     }
 
     long nextGreaterElement(int n) {
@@ -30,13 +30,14 @@ public:
         int i= sz-2;
         while(i>=0){
             if((stt[i+1] - 'a') > (stt[i] - 'a')){
-                find_ele(i, stt, sz);
-                long ans = stol(stt);
-                cout<<ans<<endl;
-                return ans > INT_MAX ? -1 : ans;
+                break;
             }
             i--;
         }
+        if(i>=0){
+        find_ele(i, stt, sz);
+        long ans = stol(stt);
+        return ans > INT_MAX ? -1 : ans;}
         return -1;
     }
 };
