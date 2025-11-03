@@ -23,6 +23,6 @@ public:
                 // count = 0;
             }
         }
-        return max(ans, ans+(summ-maxi));
+        return ans+(summ-maxi);
     }
 };
