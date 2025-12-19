@@ -1,8 +1,17 @@
 class Solution {
 public:
-    int fib(int n) {
+    int dep(int n , vector<int> &dp){
+
         if(n==0 || n==1){return n;}
 
-        return fib(n-1) + fib(n-2);
+        
+
+        return dp[n-1] = dep(n-1, dp) + dep(n-2,dp);
+    }
+
+    int fib(int n) {
+        vector<int> dp(n+1);
+        return dep(n, dp);
+        // return dp[n];
     }
 };
