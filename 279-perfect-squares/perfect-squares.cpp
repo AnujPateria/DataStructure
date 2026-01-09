@@ -1,16 +1,33 @@
 class Solution {
 public:
     int numSquares(int n) {
-        vector<int> dp(n+1, INT_MAX);
-        dp[0] = 0;
-        int count = 1;
-        while(count*count<=n){
-            int sq = count*count;
-            for(int i = sq ; i <= n ; i++){
-                dp[i] = min(dp[i-sq]+ 1, dp[i]);
+    vector<bool> visited(n + 1, false);
+    queue<int> q;
+    q.push(n);
+    visited[n] = true;
+
+    int level = 0;
+
+    while (!q.empty()) {
+        int size = q.size();
+        level++;
+
+        while (size--) {
+            int curr = q.front();
+            q.pop();
+
+            for (int i = 1; i * i <= curr; i++) {
+                int next = curr - i * i;
+                if (next == 0) return level;
+
+                if (!visited[next]) {
+                    visited[next] = true;
+                    q.push(next);
+                }
             }
-            count++;
         }
-        return dp[n];
     }
+    return level;
+}
+
 };
