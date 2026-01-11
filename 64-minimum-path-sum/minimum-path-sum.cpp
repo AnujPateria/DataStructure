@@ -10,7 +10,7 @@ public:
         // temp += grid[i][j];
 
         if (i == n - 1 && j == m - 1) {
-            return grid[i][j];
+            return dp[i][j] =grid[i][j];
             // temp = 0;
         }
         // right
@@ -29,7 +29,7 @@ public:
         int m = grid[0].size();
         int ans = INT_MAX;
          dp.assign(n, vector<int>(m, -1));
-        return dfs(i, j, n, m, grid);
+         dfs(i, j, n, m, grid);
         return dp[0][0] == -1? 0 : dp[0][0];
     }
 };
