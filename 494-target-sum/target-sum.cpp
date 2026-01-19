@@ -21,7 +21,7 @@ public:
         for(int i = 0 ;i < nums.size(); i++){
             sum+=(abs(nums[i]));
         }
-        dp.assign(2* 1e3+1, vector<int> (2* 1e3+1, -1));
+        dp.assign(2* 1e3+1, vector<int> (n+1, -1));
         return dfs(n, nums, curr, target);
     }
 };
