@@ -1,24 +1,23 @@
 class MyCalendar {
 public:
-
-
-    // vector<int> seg(4*1e9);
-    vector<pair<int, int>> calender;
+    set<pair<int, int>> calender;
     MyCalendar() {
         
     }
-
-    void query(int st, int en){
-
-    }
     
     bool book(int startTime, int endTime) {
-        for(const auto &[s,e] : calender){
-            if(startTime < e && s < endTime){
+        const pair<int, int> event(startTime, endTime);
+        const auto nextEvent = calender.lower_bound(event);
+        if(nextEvent != calender.end() && nextEvent->first < endTime){
+            return false;
+        }
+        if(nextEvent != calender.begin()){
+            const auto prevEvent = prev(nextEvent);
+            if(prevEvent-> second > startTime){
                 return false;
             }
         }
-        calender.emplace_back(startTime, endTime);
+        calender.insert(event);
         return true;
     }
 };
