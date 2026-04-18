@@ -1,22 +1,27 @@
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
-        //indeex + ele > curr_idx
-        int max_ele = INT_MIN;
-        int idx = 0;
-        for(int i = 0 ; i < nums.size(); i++){
-            if(nums[i] == 0){
-                if(i == nums.size() - 1){
-                    return true;
-                }
-                if(max_ele <= i ){
-                    return false;
-                    // continue;
-                }
-                
-            }
-            max_ele = max(max_ele, i + nums[i]);
+    
+        int n = nums.size();
+        if(n==1){
+            return true;
         }
-        return true;
+        int max_jump = 0;
+        int jump = -1;
+        for(int i = 0 ; i < n; i++){
+            // if(max_jump == i){
+            //     jump ++;
+            // }
+            max_jump = max(max_jump, i + nums[i]);
+            if(max_jump >= n-1){
+                return true;
+            }
+            if(max_jump == i && nums[i] == 0){
+                return false;
+            }
+            
+            // if(max_jump == i)
+        }
+        return false;
     }
 };
