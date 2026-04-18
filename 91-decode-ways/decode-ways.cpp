@@ -1,22 +1,29 @@
 class Solution {
 public:
-    int numDecodings(string s) {
-        int n = s.length();
-        if(s[0] == '0'){
+    vector<int> dp;
+    int solve(int i, int n, string s){
+        if(i == n){
+            return 1;
+        }
+        if(s[i] == '0'){
             return 0;
         }
-        vector<int>dp(n + 1, 0);
-        dp[0] = 1;
-        dp[1] = 1;
-        for(int i = 2 ; i <= n ; i++){
-            if(s[i-1] != '0'){
-                dp[i] += dp[i-1];
-            }
-            int twodigit = (s[i-2] - '0') * 10 + (s[i-1]-'0');
-            if(twodigit >= 10 && twodigit <= 26){
-                dp[i] += dp[i-2];
-            }
+        if(dp[i] != -1){
+            return dp[i];
         }
-        return dp[n];
+
+        int ways = 0;
+        // if((s[i]) != '0'){
+            ways += solve(i+1, n, s);
+        // }
+        if(i + 1 < n && (s[i] == '1' || (s[i] == '2' && s[i+1]  <= '6'))){
+            ways += solve(i+2, n, s);
+        }
+        return dp[i]=ways;
+    }
+
+    int numDecodings(string s) {
+        dp.assign(s.length(), -1);
+        return solve(0, s.length(), s);
     }
 };
