@@ -1,101 +1,84 @@
 class NumMatrix {
 public:
+
     vector<vector<int>> seg;
-    int n; int m;
-
-    /*
-    void buildTree(matrix, idx, st, en){
-        if(st == en){
-            seg[idx] = matrix[st];
-            return;
-        }
-        int mid = st + en;
-        buildTree(matrix, 2*idx + 1, st, mid);
-        buildTree(matrix, 2*idx + 2, mid+1, en);
-        seg[idx] = min(seg[2*idx + 1], seg[2*idx + 2]);
+    vector<vector<int>> arr;
+    int n, m;
+    NumMatrix(vector<vector<int>>& matrix) {
+        n = matrix.size();
+        m = matrix[0].size();
+        arr = matrix;
+        seg.assign(4*n, vector<int> (4*m, 0));
+        buildX(0, 0, n-1);
     }
-
-    int query(matrix,  int str, int enr, int firstidx, int endidx){
-        if(firstidx >= str && endidx <= )
-    }
-    FIRST_IDX >= l && LAST_IDX  <= r // completely cover array (ffull sum array)
-
-    FIRST_IDX > R || last_idx < l // not even a single element cover the array
-
-
-
-    */
-// this we do for 1d array now for 2d first iterate x then iterate y
-
-
-    void buildY(vector<vector<int>>&matrix, int nodeX, int stX, int enX){
+    
+    void buildX(int nodeX, int stX, int enX){
         if(stX == enX){
-            buildX(matrix, nodeX, stX, enX, 0, 0, m-1);
+            buildY(nodeX, 0, stX, 0, enX, m-1);
         }
         else{
             int mid = (stX + enX)/2;
-            buildY(matrix, 2*nodeX + 1, stX, mid);
-            buildY(matrix, 2*nodeX + 2, mid + 1, enX);
-
-            buildX(matrix, nodeX, stX, enX, 0, 0, m-1);
+            buildX(2*nodeX + 1, stX, mid);
+            buildX(2*nodeX + 2, mid + 1, enX);
+            buildY(nodeX, 0, stX, 0, enX, m-1);
         }
-
+       
     }
-
-
-    void buildX(vector<vector<int>>&matrix,int nodeX, int stX, int enX, int nodeY, int stY, int enY){
+    void buildY(int nodeX, int nodeY, int stX, int stY, int enX, int enY){
         if(stY == enY){
             if(stX == enX){
-                seg[nodeX][nodeY] = matrix[stX][stY];
+                seg[nodeX][nodeY] = arr[stX][stY];
             }
             else{
-                seg[nodeX][nodeY] = seg[2*nodeX + 1][nodeY] + seg[2*nodeX+2][nodeY];
+                seg[nodeX][nodeY] = seg[2*nodeX + 1][nodeY] + seg[2*nodeX + 2][nodeY];
             }
         }
         else{
-            int mid =( stY + enY )/2;
-            buildX(matrix, nodeX, stX, enX, 2*nodeY + 1, stY, mid);
-            buildX(matrix, nodeX, stX, enX, 2*nodeY + 2, mid + 1, enY);
-
+            int mid = (stY + enY)/2;
+            buildY(nodeX, 2*nodeY + 1, stX, stY, enX, mid);
+            buildY(nodeX, 2*nodeY + 2, stX, mid + 1, enX, enY);
             seg[nodeX][nodeY] = seg[nodeX][2*nodeY + 1] + seg[nodeX][2*nodeY + 2];
         }
     }
+    int queryY(int nodeX, int nodeY, int st_y, int en_y,
+           int stY, int enY) {
 
+    // no overlap
+    if (st_y > enY || en_y < stY) return 0;
 
-    NumMatrix(vector<vector<int>>& matrix) {
-         n = matrix.size();
-         m = matrix[0].size();
-        seg.assign(4*n, vector<int>(4*m));
-        buildY(matrix, 0, 0, n-1);
-        //for this first build x then build y
-    }
+    // complete overlap
+    if (st_y >= stY && en_y <= enY)
+        return seg[nodeX][nodeY];
 
-    int queryY(int nodeX, int nodeY, int stY, int enY, int y1, int y2){
-        if(stY>=y1 && enY<=y2){
-            return seg[nodeX][nodeY];
-        }
-        if(enY < y1 || stY > y2){
-            return 0;
-        }
-        int mid = (stY + enY)/2;
-        return queryY(nodeX, 2*nodeY + 1, stY, mid, y1, y2) + queryY(nodeX, 2*nodeY + 2, mid + 1, enY, y1, y2);
-    }
+    int mid = (st_y + en_y) / 2;
 
-    int queryX(int nodeX, int stX, int enX, int x1, int y1, int x2, int y2){
-        if(stX >= x1 && enX <= x2){
-            return queryY(nodeX, 0, 0, m-1, y1, y2);
-        }
-        if(stX > x2 || enX < x1){
-            return 0;
-        }
-        int mid  =( stX  + enX )/2;
-        return queryX(2*nodeX + 1, stX, mid, x1, y1, x2, y2) + queryX(2*nodeX + 2, mid + 1, enX, x1, y1, x2, y2);
+    return queryY(nodeX, 2*nodeY + 1, st_y, mid, stY, enY) +
+           queryY(nodeX, 2*nodeY + 2, mid+1, en_y, stY, enY);
+}
 
-    }
+int queryX(int node, int nodeX_st, int nodeX_en,
+           int stX, int enX, int stY, int enY){
 
+    // no overlap
+    if (nodeX_st > enX || nodeX_en < stX) return 0;
+
+    // complete overlap
+    if (nodeX_st >= stX && nodeX_en <= enX)
+        return queryY(node, 0, 0, m-1, stY, enY);
+
+    int mid = (nodeX_st + nodeX_en) / 2;
+
+    return queryX(2*node + 1, nodeX_st, mid, stX, enX, stY, enY) +
+           queryX(2*node + 2, mid+1, nodeX_en, stX, enX, stY, enY);
+}
     
+
+
+
     int sumRegion(int row1, int col1, int row2, int col2) {
-        return queryX(0, 0, n-1, row1, col1, row2, col2);
+        return queryX(0, 0, n-1, row1, row2, col1, col2);
+
+        // return queryX()
     }
 };
 
