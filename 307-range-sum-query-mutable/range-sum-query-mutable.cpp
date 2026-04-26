@@ -1,67 +1,59 @@
 class NumArray {
 public:
-
-    vector<int> seg;
+    vector<int>seg;
+    vector<int> arr;
     int n;
-
-    void buildTree(vector<int> &nums, int idx, int i, int j){
-        if(i == j){
-            seg[idx] = nums[i];
-            return ;
-        }
-        int mid = (i + j) / 2;
-        buildTree(nums, 2*idx + 1, i, mid);
-        buildTree(nums, 2*idx + 2, mid+1, j);
-        seg[idx] = seg[2*idx + 1] + seg[2*idx + 2];
-
-    }
-
     NumArray(vector<int>& nums) {
-        if(nums.size() > 0){
-            n = nums.size();
-            seg.resize(4*n);
-            buildTree(nums, 0, 0, n-1);
-        }
+        n = nums.size();
+        seg.assign(4*n, 0);
+        arr = nums;
+        build(0, 0, n-1);
     }
 
-    void updateTree(int idx, int low, int high, int curr, int val){
-        if(low == high){
-            seg[idx] = val;
-            // arr[idx] = val;
+    void build(int node, int st, int en){
+        if(st == en){
+            seg[node] = arr[st];
             return;
         }
-        int mid = (low + high)/2;
-        if(curr <= mid){
-            updateTree(2*idx + 1, low, mid, curr, val );
+        int mid = (st + en)/2;
+        build(2*node + 1, st, mid);
+        build(2*node + 2, mid + 1, en);
+
+        seg[node] = seg[2*node + 1] + seg[2*node + 2];
+    }
+    int query(int node, int i, int j, int st, int en){
+        if(i>en || j < st){
+            return 0;
+        }
+        if(i <= st && j>=en){
+            return seg[node];
+        }
+        int mid = (st + en)/2;
+        return query(2*node + 1, i, j, st, mid) + query(2*node + 2, i, j, mid + 1, en);
+    }
+    void updateQuery(int idx, int pos,  int val, int st, int en){
+
+        if(st == en){
+            seg[idx] = val;
+            arr[pos] = val;
+            return ;
+        }
+
+        int mid = (st + en)/2;
+        if(pos <= mid){
+            updateQuery(2*idx+1,pos,  val, st , mid);
         }
         else{
-            updateTree(2*idx + 2, mid+1, high, curr, val);
+            updateQuery(2*idx+2,pos,  val, mid + 1, en);
         }
         seg[idx] = seg[2*idx + 1] + seg[2*idx + 2];
     }
-    
     void update(int index, int val) {
-        if(n==0) return ;
-        updateTree(0, 0, n-1, index, val);
-    }
-    int sumUpdate(int idx, int low, int high, int l, int r){
-        if(low>=l && high<= r){
-            return seg[idx];
-        }
-
-        if(low > r || high < l){
-            return 0;
-        }
-        int mid = (low + high) /2;
-        int left = sumUpdate(2*idx + 1, low, mid, l, r);
-        int right = sumUpdate(2*idx + 2, mid+1, high, l, r);
-        return left + right;
+        return updateQuery(0, index, val, 0, n-1);
     }
     
     int sumRange(int left, int right) {
-        if(n==0) return 0;
-        return sumUpdate(0, 0, n-1, left, right);
-
+        return query(0, left, right, 0, n-1);
     }
 };
 
