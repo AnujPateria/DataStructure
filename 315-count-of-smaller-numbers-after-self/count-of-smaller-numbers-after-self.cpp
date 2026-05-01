@@ -29,9 +29,9 @@ public:
         sort(v.begin(), v.end());
         vector<int> ans(n, 0);
         for(auto &[el,id] : v){
-            update(1, id + 1);
-            ans[id] = query(n) - query(id + 1);
-        }
+    ans[id] = query(n) - query(id + 1); // count right side first
+    update(1, id + 1);
+}
         return ans;
     }
 };
