@@ -1,37 +1,50 @@
 class Solution {
 public:
 
-    vector<int> bit;
-    int n;
+    vector<pair<int, int> > vec;
+    vector<int> count;
 
-    void update(int add, int id){
-        while(id<=n){
-            bit[id] += add;
-            id += (id & (-id));
+    void merge(int i, int mid, int j){
+        vector<pair<int, int> > temp(j - i + 1);
+        int k = 0;
+        int st = i;
+        int en = mid + 1; //i
+        while(st<=mid && en<=j){
+            if(vec[st].first <= vec[en].first){
+                temp[k++] = vec[en++];
+            }
+            else{
+                count[vec[st].second] += (j - en + 1);
+                temp[k++] = vec[st++];
+            }
+        }
+        while(st <= mid){
+            temp[k++] = vec[st++];
+        }
+        while(en<=j){
+            temp[k++] = vec[en++];
+        }
+        for(int a = i ; a <= j ; a++){
+            vec[a] = temp[a - i];
         }
     }
-    int query(int id){
-        int ans = 0;
-        while(id > 0){
-            ans += bit[id];
-            id -= (id & (-id));
-        }
-        return ans;
+
+    void mergesort(int i, int j){
+        if(i>=j) return;
+        int mid = (i+j)/2;
+        mergesort(i, mid);
+        mergesort(mid + 1, j);
+        merge(i, mid, j);
     }
 
     vector<int> countSmaller(vector<int>& nums) {
-        n = nums.size();
-        bit = vector<int> (n+1, 0);
-        vector<pair<int, int>> v;
-        for(int i = 0 ; i < n ; i++){
-            v.push_back({nums[i], i});
+        int n = nums.size();
+        for(int i = 0 ; i < n; i++){
+            vec.push_back({nums[i], i});
         }
-        sort(v.begin(), v.end());
-        vector<int> ans(n, 0);
-        for(auto &[el,id] : v){
-    ans[id] = query(n) - query(id + 1); // count right side first
-    update(1, id + 1);
-}
-        return ans;
+        count = vector<int> (n, 0);
+
+        mergesort(0, n-1);
+        return count;
     }
 };
