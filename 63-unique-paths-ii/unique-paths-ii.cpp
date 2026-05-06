@@ -1,31 +1,33 @@
 class Solution {
 public:
-
 vector<vector<int>> dp;
+    int solve(int i, int j, int n, int m,vector<vector<int>>&obj){
+        // if(obj[i][j] == 1){
+        //     return 0;
+        // }
 
-    int dfs(int i, int j, int n, int m, vector<vector<int>>& ob){
-        if(i < 0 || i >= n || j < 0 || j>= m ){
+        if(i == n - 1 && j == m -1 && obj[i][j] == 0){
+            return 1;
+        }
+       
+        if(i>=n || j>=m){
             return 0;
         }
-        if(i==n-1 && j==m-1){
-            return 1;
+        if(obj[i][j] == 1){
+            return 0;
         }
         if(dp[i][j] != -1){
             return dp[i][j];
         }
-        if(ob[i][j] == 1){
-            return 0;
-        }
-        return dp[i][j] = dfs(i+1, j, n, m, ob) +  dfs(i, j+1, n, m, ob);
-    }
 
-    int uniquePathsWithObstacles(vector<vector<int>>& ob) {
-        int n = ob.size();
-        int m = ob[0].size();
-        dp.assign(n, vector<int>(m , -1));
-        if(ob[n-1][m-1] == 1){
-            return 0;
-        }
-        return dfs(0,0,n,m,ob);
+        
+        return dp[i][j]=solve(i+1, j, n, m, obj) + solve(i, j+1, n, m, obj);
+    }
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+            int n = obstacleGrid.size();
+            int m = obstacleGrid[0].size();
+        dp.assign(n+1 ,vector<int> (m+1, -1));
+        return solve(0, 0, n, m, obstacleGrid);
+    
     }
 };
