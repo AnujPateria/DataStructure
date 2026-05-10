@@ -12,28 +12,27 @@
 class Solution {
 public:
 
-    void solve(TreeNode* root, int targetSum, int &count, long long curr){
-        if(!root) return ;
-        
-
-        curr += root->val;
-
-        if(targetSum == curr){
-            count++;
+    // int ans = 0;
+    void solve(TreeNode* root, int &tar, long long curr, int &ans){
+        if(!root){
+            return ;
         }
-
-        solve(root->left, targetSum, count, curr);
-        solve(root->right, targetSum, count, curr);
-        
+        curr += root->val;
+        if(tar == curr){
+            ans += 1;
+        }
+        solve(root->left, tar , curr, ans);
+        solve(root->right, tar , curr, ans);
+        // return max(left, right);
     }
 
     int pathSum(TreeNode* root, int targetSum) {
-        int count = 0;
-        if(root==nullptr) return 0;
-        solve(root, targetSum, count, 0);
-
-        count+=pathSum(root->left, targetSum);
-        count+=pathSum(root->right,targetSum);
-        return count;
+        int ans = 0;
+        if(root == nullptr) return ans;
+        solve(root,targetSum, 0, ans);
+        ans += pathSum(root->left, targetSum);
+        ans += pathSum(root->right, targetSum);
+        return ans;
+        // return solve(root, targetSum);
     }
 };
