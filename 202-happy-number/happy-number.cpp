@@ -13,7 +13,6 @@ public:
             
             mp[sum]++;
             n = sum;
-            cout<<n<<" ";
             if(sum == 1){
                 break;
             }
