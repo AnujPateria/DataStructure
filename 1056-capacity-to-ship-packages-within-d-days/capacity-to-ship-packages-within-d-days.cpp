@@ -5,9 +5,9 @@ public:
         int count = 1;
         int sum = 0;
         for(int num : w){
-            if(num > mid){
-                return false;
-            }
+            // if(num > mid){
+            //     return false;
+            // }
             if(num + sum <= mid){
                 sum+=num;
             }
