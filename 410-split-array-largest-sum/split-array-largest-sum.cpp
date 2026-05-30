@@ -1,31 +1,34 @@
 class Solution {
 public:
 
-    bool solve(vector<int> &nums, int k, int mid){
+    bool kSplit(int mid, int k, vector<int> &nums, int &ans){
+        int curr = 0;
         int count = 1;
-        int sum = 0;
-        for(int num : nums){
-            if(num + sum <= mid){
-                sum+=num;
-            } else {
+        // int ans = 0;
+        for(int i = 0 ; i < nums.size(); i++){
+            curr += nums[i];
+            if(curr > mid){
                 count++;
-                sum = num;
+                curr = nums[i];
             }
+            ans = max(ans, curr);
         }
         return count <= k;
 
     }
 
     int splitArray(vector<int>& nums, int k) {
-        int st = *max_element(nums.begin(), nums.end());
+        int st = *min_element(nums.begin(), nums.end());
         int en = 0;
-        for(int num : nums) en+=num;
-
-        int ans = en;
+        for(int i = 0 ; i< nums.size(); i++){
+            en+=(nums[i]);
+        }
+        int ans = 0;
         while(st <= en){
-            int mid = (st+en)/2;
-            if(solve(nums, k, mid)){
-                ans = mid; 
+            int mid = (st + en)/2;
+            int temp = 0;
+            if(kSplit(mid, k, nums, temp)){
+                ans = temp;
                 en = mid - 1;
             }
             else{
