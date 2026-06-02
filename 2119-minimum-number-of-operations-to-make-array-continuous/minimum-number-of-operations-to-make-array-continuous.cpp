@@ -1,20 +1,19 @@
 class Solution {
 public:
-    int minOperations(vector<int>& A) {
-        
-        int N = A.size(), i = 0, j = 0;
-        sort(begin(A), end(A));
-        A.erase(unique(begin(A), end(A)), end(A)); // only keep unique elements
-        for (int M = A.size(); j < M; ++j) {
-            if (A[i] + N <= A[j]) ++i;
+    int minOperations(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n=nums.size();
+        auto last=unique(nums.begin(), nums.end());
+        nums.erase(last, nums.end());
+
+        int left=0, maxcnt=0;
+        for(int right=0; right<nums.size(); right++){
+            while(nums[right]-nums[left]>=n){
+                left++;
+            }
+            maxcnt=max(maxcnt, right-left+1);
         }
-        return N - j + i;
-
-
-
-
+        return n-maxcnt;
         
-    
-
     }
 };
