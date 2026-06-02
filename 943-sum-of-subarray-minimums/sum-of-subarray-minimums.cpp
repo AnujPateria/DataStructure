@@ -4,7 +4,7 @@ public:
     int sumSubarrayMins(vector<int>& arr) {
         const long long mod = 1e9 + 7;
         int n = arr.size();
-        vector<int> next_sml(n, n), prev_sml(n, -1);
+        vector<int> next_sml(n, n);
 
         vector<long long> dp(n, 0);
 
