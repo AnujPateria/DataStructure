@@ -7,7 +7,7 @@ public:
         int ans = 0;
         for(int i = 0 ; i < nums.size(); i++){
             sum += nums[i];
-            if(mp.count(sum - goal)){
+            if(mp.find(sum - goal) != mp.end()){
                 ans += mp[sum - goal];
             }
             mp[sum]++;
