@@ -1,9 +1,8 @@
 class Solution {
 public:
     vector<vector<string>> ans;
-
     bool isSafe(int i, int j, int n, vector<string> &board){
-        for(int row = 0 ; row < n ; row++){
+        for(int row = 0 ; row <= i ; row++){
             if(board[row][j] == 'Q'){
                 return false;
             }
@@ -33,7 +32,6 @@ public:
             ans.push_back(board);
             return; 
         }
-
         for(int col = 0; col < n; col++){
             if(isSafe(i, col, n, board)){
                 board[i][col] = 'Q';
@@ -46,8 +44,5 @@ public:
         vector<string> board(n, string(n, '.'));
         solve(0, n, board);
         return ans;
-        
-        
-        
     }
 };
