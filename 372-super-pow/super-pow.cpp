@@ -1,31 +1,33 @@
 class Solution {
 public:
-    const int MOD = 1337;
+    const int mod = 1337;
 
-    int modPow(int base, int exp) {
-        base %= MOD;
-        int result = 1;
-
-        while (exp > 0) {
-            if (exp % 2 == 1) {
-                result = (result * base) % MOD;
-            }
-
-            base = (base * base) % MOD;
-            exp = exp / 2;
+    int find_b_power(int a, int ele){
+        int prev = 1;
+        for(int j = 1 ; j <= ele; j++){
+            prev = (prev * a) % mod;
         }
-
-        return result;
+        return prev;
     }
 
     int superPow(int a, vector<int>& b) {
-        a %= MOD;
+        a = a % mod;
         int ans = 1;
+        // int count = 1;
+        // b[b.size() - 1] = find_b_power(a, b[b.size() - 1]);
+        // int prev = a;
+        for(int i = 0; i < b.size(); i++){
+            // int ele = b[i];
+            // int temp = 1;
 
-        for (int digit : b) {
-            ans = (modPow(ans, 10) * modPow(a, digit)) % MOD;
+            // for(int j = 1; j <= 10 ; j++){
+            //     temp = (temp * prev) % mod;
+            // }
+
+            // prev = temp;
+            ans = (find_b_power(ans, 10) * find_b_power(a, b[i])) % mod;
+
         }
-
         return ans;
     }
 };
