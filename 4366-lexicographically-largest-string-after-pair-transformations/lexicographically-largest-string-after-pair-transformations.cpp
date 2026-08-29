@@ -12,7 +12,7 @@ public:
                     if (bit < 26) {
                         temp += char('a' + bit);
                     } else {
-                        temp += "zz";
+                        temp += "zz"; break;
                     }
                 }
             }
