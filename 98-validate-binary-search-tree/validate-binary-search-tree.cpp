@@ -12,22 +12,14 @@
 class Solution {
 public:
 
-    void solve(TreeNode* root, vector<int>&ans){
-        if(root == nullptr) return ;
-        solve(root->left, ans);
-        ans.push_back(root->val);
-        solve(root->right, ans);
-    }
+    TreeNode* prev = nullptr;
 
     bool isValidBST(TreeNode* root) {
-        vector<int> ans;
-        solve(root, ans);
-        for(int i = 1; i< ans.size(); i++){
-            if(ans[i-1] < ans[i]){
-                continue;
-            }
-            return false;
-        }
-        return true;
+        if( root == nullptr) return true;
+
+        if(!isValidBST(root->left)) return false;
+        if(prev!= nullptr && prev->val >= root->val) return false;
+        prev = root;
+        return isValidBST(root->right);
     }
 };
