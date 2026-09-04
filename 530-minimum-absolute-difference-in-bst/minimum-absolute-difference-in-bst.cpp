@@ -11,23 +11,22 @@
  */
 class Solution {
 public:
-    void mindiff(TreeNode* root , TreeNode* &prev , int &ans){
-        if(root==nullptr){
-            return ;
+
+    void solve(TreeNode* node, int &ans, TreeNode* &prev){
+        if(node == nullptr) return ;
+        solve(node->left, ans, prev);
+        if(prev != nullptr){
+            ans = min(ans, abs(node->val - prev->val));
         }
-        mindiff(root->left , prev , ans);
-        if(prev)
-        {
-            ans = min(ans ,abs( root->val-prev->val));
-        }
-        prev = root;
-        mindiff(root->right , prev , ans);
+        prev = node;
+        solve(node->right, ans, prev);
     }
+
     int getMinimumDifference(TreeNode* root) {
-        int ans = 100000 +  2;
+        int ans = INT_MAX;
         TreeNode* prev = nullptr;
-        mindiff(root , prev , ans); 
+        solve(root, ans, prev);
         return ans;
-       
+
     }
 };
